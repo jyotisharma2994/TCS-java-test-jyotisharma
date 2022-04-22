@@ -1,23 +1,16 @@
 package scheduler;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.util.Map;
 
 public class Application {
 
-    public static void main(String[] args) throws FileNotFoundException {
-        BufferedReader reader =
-                new BufferedReader(new FileReader("src/main/resources/input.txt"));
-        String inputRequest = readAllLinesWithStream(reader);
+    public static void main(String[] args) throws IOException {
         MeetingScheduler meetingScheduler = new MeetingScheduler();
-        meetingScheduler.schedule(inputRequest);
-    }
-
-    private static String readAllLinesWithStream(BufferedReader reader) {
-        return reader.lines()
-                .collect(Collectors.joining(System.lineSeparator()));
+        String fileName = "src/main/resources/input.txt";
+        Map<Long, Meeting> scheduledMeetings = meetingScheduler.schedule(fileName);
+        String bookedMeetings = meetingScheduler.generateOutput(scheduledMeetings);
+        System.out.println(bookedMeetings);
     }
 }
 
