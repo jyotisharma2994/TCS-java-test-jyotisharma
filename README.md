@@ -1,4 +1,4 @@
-#Assignment
+# Assignment
 
 Your company has an existing system for employees to submit booking requests for meetings in the
 boardroom. Your employer has now asked you to implement a system for processing batches of
@@ -74,3 +74,6 @@ following output
   complete the task. 
 - Please make sure all code is checked at the end of the session and submit any
   extra documentation you would like to share 
+
+# Implementation
+- Implementing the solution using tree map so that ordering can be done by using keys.
