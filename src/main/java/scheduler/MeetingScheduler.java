@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,12 +20,12 @@ public class MeetingScheduler {
      * @return scheduled meetings
      * @throws IOException
      */
-    public Map<Long, Meeting> schedule(String fileName) throws IOException {
+    public Schedule schedule(String fileName) throws IOException {
         BufferedReader reader =
                 new BufferedReader(new FileReader(fileName));
         String[] officeTime = reader.readLine().split(" ");
         Map<Long, Meeting> meetingReqMap = new TreeMap<>();
-        Map<String, LocalTime> officeHours = calculateOfficeHours(officeTime);
+        Schedule schedule = calculateOfficeHours(officeTime);
 
         String requestLine;
         while ((requestLine = reader.readLine()) != null) {
@@ -53,7 +52,8 @@ public class MeetingScheduler {
 
             meetingReqMap.put(submissionDateTimeEpoch, meeting);
         }
-        return extractMeeting(meetingReqMap, officeHours);
+        schedule.setScheduledMeeting(extractMeeting(meetingReqMap, schedule));
+        return schedule;
     }
 
     /**
@@ -75,13 +75,13 @@ public class MeetingScheduler {
 
     /**
      * @param meetingReqMap meeting requests
-     * @param officeHours office hours
+     * @param officeSchedule office hours
      * @return possible confirmed meetings as per request
      */
-    private Map<Long, Meeting> extractMeeting(Map<Long, Meeting> meetingReqMap, Map<String, LocalTime> officeHours) {
+    private Map<Long, Meeting> extractMeeting(Map<Long, Meeting> meetingReqMap, Schedule officeSchedule) {
         Map<Long, Meeting> scheduledMeetings = new TreeMap<>();
-        LocalTime officeStartTime = officeHours.get("officeStartTime");
-        LocalTime officeEndTime = officeHours.get("officeEndTime");
+        LocalTime officeStartTime = officeSchedule.getOfficeStartTime();
+        LocalTime officeEndTime = officeSchedule.getOfficeEndTime();
         meetingReqMap.forEach((k, v) -> {
             if (v.getStartTime().isAfter(officeStartTime) && v.getEndTime().isBefore(officeEndTime)) {
                 if (scheduledMeetings.size() == 0) {
@@ -114,16 +114,16 @@ public class MeetingScheduler {
      * @param officeTime
      * @return office start and end time
      */
-    private Map<String, LocalTime> calculateOfficeHours(String[] officeTime) {
-        Map<String, LocalTime> officeTimes = new HashMap<>();
+    public Schedule calculateOfficeHours(String[] officeTime) {
         LocalTime officeStartTime = LocalTime
                 .of(parseInt(officeTime[0].substring(0, 2)), parseInt(officeTime[0].substring(2, 4)))
                 .minusMinutes(1);
         LocalTime officeEndTime = LocalTime
                 .of(parseInt(officeTime[1].substring(0, 2)), parseInt(officeTime[1].substring(2, 4)))
                 .plusMinutes(1);
-        officeTimes.put("officeStartTime", officeStartTime);
-        officeTimes.put("officeEndTime", officeEndTime);
-        return officeTimes;
+        Schedule schedule = new Schedule();
+        schedule.setOfficeStartTime(officeStartTime);
+        schedule.setOfficeEndTime(officeEndTime);
+        return schedule;
     }
 }
