@@ -40,5 +40,9 @@ public class Meeting {
     public LocalDateTime getMeetingStartTime() {
         return meetingStartTime;
     }
+
+    public LocalDateTime getMeetingEndTime() {
+        return meetingEndTime;
+    }
 }
 

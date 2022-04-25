@@ -1,12 +1,13 @@
 package scheduler;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 
 public class Schedule {
     private LocalTime officeStartTime;
     private LocalTime officeEndTime;
-    private Map<Long, Meeting> scheduledMeeting;
+    private Map<LocalDateTime, Meeting> scheduledMeeting;
 
     public LocalTime getOfficeStartTime() {
         return officeStartTime;
@@ -24,11 +25,11 @@ public class Schedule {
         this.officeEndTime = officeEndTime;
     }
 
-    public Map<Long, Meeting> getScheduledMeeting() {
+    public Map<LocalDateTime, Meeting> getScheduledMeeting() {
         return scheduledMeeting;
     }
 
-    public void setScheduledMeeting(Map<Long, Meeting> scheduledMeeting) {
+    public void setScheduledMeeting(Map<LocalDateTime, Meeting> scheduledMeeting) {
         this.scheduledMeeting = scheduledMeeting;
     }
 }
